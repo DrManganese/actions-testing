@@ -20,3 +20,8 @@ jobs:
         run: sbt package
       - name: List
         run: tree
+      - name: Upload jar
+        uses: actions/upload-artifact@v3
+        with:
+          name: jar
+          path: ./target/scala-2.13/actions-testing*.jar
