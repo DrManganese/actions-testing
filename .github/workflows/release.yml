@@ -25,3 +25,7 @@ jobs:
         with:
           name: jar
           path: ./target/scala-2.13/actions-testing*.jar
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./target/scala-2.13/actions-testing*.jar
