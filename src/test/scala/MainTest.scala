@@ -10,6 +10,6 @@ class MainTest extends AnyFunSuite with Matchers {
   }
   
   test("square of 1 should always be 1") {
-    Main.square(1) mustBe 2
+    Main.square(1) mustBe 1
   }
 }
