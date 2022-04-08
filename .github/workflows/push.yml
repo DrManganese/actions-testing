@@ -1,56 +1,7 @@
-name: Build
+name: Push
 
-on:
-  workflow_dispatch:
-  push:
-    branches: [ main ]
-    tags: [ 'v*' ]
-  pull_request:
-    branches: [ main ]
-  
+on: [ workflow_dispatch, push ]
+
 jobs:
-  verify:
-    name: Compile 
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-        java-version: '17'
-        distribution: 'zulu'
-    - name: Run tests
-      run: sbt compile test
-    - name: Publish Unit Test Reports
-      uses: EnricoMi/publish-unit-test-result-action@v1
-      if: always()
-      with:
-        files: "target/test-reports/*.xml"
-  package:
-    name: Build & Package
-    needs: verify
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'zulu'
-      - name: Package
-        run: sbt package
-      - name: Upload JAR
-        uses: actions/upload-artifact@v3
-        with:
-          name: jar
-          path: ./target/scala-2.13/actions-testing*.jar
-  release:
-    name: Release
-    needs: package
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: jar
-      - name: Display structure of downloaded files
-        run: ls -R
+  build:
+      uses: DrManganese/actions-testing/.github/workflows/build.yml@main

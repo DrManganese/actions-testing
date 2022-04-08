@@ -1,31 +1,17 @@
 name: Release
 
-on:
-  push:
-    tags:
-      - 'v*'
+on: [ workflow_call ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'zulu'
-      - name: Run tests
-        run: sbt package
-      - name: List
-        run: tree
-      - name: Upload jar
-        uses: actions/upload-artifact@v3
+      - name: Download jar
+        uses: actions/download-artifact@v3
         with:
           name: jar
-          path: ./target/scala-2.13/actions-testing*.jar
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: ./target/scala-2.13/actions-testing*.jar
+          files: actions-testing*.jar
