@@ -3,10 +3,11 @@ on:
     types: [published]
 
 jobs:
-  call-build:
+  build:
     uses: ./.github/workflows/build.yml
   verify-version:
     runs-on: ubuntu-latest
+    needs: [ build ]
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -19,7 +20,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
       - name: Compare Gradle project version and release tag
         run: |
-          project_version="$(./gradlew -q --no-daemon common:properties --property version | tail -1 | cut -f2 -d':' | tr -d ' ')"
+          project_version="$(./gradlew common:properties -q --property version | tail -1 | cut -f2 -d':' | tr -d ' ')"
           echo "::group::Versions"
           echo "Project version = v${project_version}"
           echo "Release version = ${{ github.event.release.tag_name }}"
