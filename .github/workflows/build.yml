@@ -18,8 +18,10 @@ jobs:
           java-version: 17
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+      - name: Clear cache locks
+        run: rm -f ~/.gradle/caches/*/*.lock
       - name: Build with Gradle
-        run: ./gradlew --no-daemon common:build
+        run: ./gradlew build
   loader:
     runs-on: ubuntu-latest
     needs: [ common ]
@@ -36,8 +38,10 @@ jobs:
           java-version: 17
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+      - name: Clear cache locks
+        run: rm -f ~/.gradle/caches/*/*.lock
       - name: Build with Gradle
-        run: ./gradlew --no-daemon ${{ matrix.subproject }}:build
+        run: ./gradlew ${{ matrix.subproject }}:build
       - name: Archive artifacts
         uses: actions/upload-artifact@v4
         with:
